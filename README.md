@@ -10,20 +10,20 @@ Este projeto consiste na criação de um Data Lake para armazenar dados brutos d
 
 O Data Lake foi configurado com a seguinte estrutura de pastas:
 
-restaurante-datalake/
-raw/                  # Dados brutos extraídos diretamente das APIs
--guest-checks/     # Dados referentes aos pedidos dos clientes
--fiscal-invoice/   # Dados fiscais
--transactions/     # Dados de transações financeiras
--chargeback/       # Dados de estornos
--cash-management/  # Dados de gerenciamento de caixa
-processed/            # Dados processados e transformados
--daily-revenue/    # Dados consolidados de receitas diárias
--errors/           # Logs de erros processados
-consolidated/         # Dados consolidados prontos para análise
-logs/                 # Logs de execução
--api-requests/     # Logs de requisições das APIs
--etl/              # Logs de execução do pipeline ETL
+- `restaurante-datalake/`
+  - **raw/**: Dados brutos extraídos diretamente das APIs.
+    - **guest-checks/**: Dados referentes aos pedidos dos clientes.
+    - **fiscal-invoice/**: Dados fiscais.
+    - **transactions/**: Dados de transações financeiras.
+    - **chargeback/**: Dados de estornos.
+    - **cash-management/**: Dados de gerenciamento de caixa.
+  - **processed/**: Dados processados e transformados.
+    - **daily-revenue/**: Dados consolidados de receitas diárias.
+    - **errors/**: Logs de erros processados.
+  - **consolidated/**: Dados consolidados prontos para análise.
+  - **logs/**: Logs de execução.
+    - **api-requests/**: Logs de requisições das APIs.
+    - **etl/**: Logs de execução do pipeline ETL.
 
 ## Como Executar
 
