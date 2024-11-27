@@ -33,7 +33,7 @@ O Data Lake foi configurado com a seguinte estrutura de pastas:
 2. Verifique que o arquivo `ERP.json` está localizado no caminho `raw/guest-checks/`.
 
 ### Passo 2: Configuração do Banco de Dados MySQL
-1. Crie o banco de dados e as tabelas utilizando o script SQL disponível no arquivo `desafio_cocobambu.sql`.
+1. Crie o banco de dados e as tabelas no MySQL utilizando o script SQL disponível no arquivo `desafio_cocobambu.sql`.
 2. O script cria o databse e as tabelas relacionadas aos dados extraídos, como `guestChecks`, `taxes`, `detailLines`, entre outras.
 
 ### Passo 3: População com Python
