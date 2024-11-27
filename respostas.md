@@ -169,11 +169,24 @@ A alternativa de adicionar `discount`, `serviceCharge`, `tenderMedia` e `errorCo
 
 ### Justificativa
 
-1. **Divisão lógica**: subdiretórios organizados por tipo de dado.
-2. **Facilidade de manipulação**: processamento independente de cada conjunto de dados.
-3. **Verificação e logs**: documentação de interações e falhas no pipeline.
-4. **Processamento gradual**: validação em cada etapa.
-5. **Consolidação**: dados refinados prontos para análise.
+1. **Divisão lógica**: cada subdiretório dentro de raw/ corresponde a um endpoint ou tipo de
+dado fornecido pelas APIs. Isso facilita localizar e manipular os dados brutos
+individualmente.
+2. **Facilidade de manipulação**: a separação em pastas permite processar cada conjunto de
+dados (como guest-checks ou fiscal-invoice) de forma independente, mantendo a
+flexibilidade para atualizações ou alterações específicas.
+3. **Verificação e logs**: a separação em pastas permite processar cada conjunto de
+dados (como guest-checks ou fiscal-invoice) de forma independente, mantendo a
+flexibilidade para atualizações ou alterações específicas.
+4. **Processamento gradual**: o diretório processed/ armazena dados intermediários,
+permitindo validações após cada etapa do pipeline (ex.: verificar receitas diárias antes
+da consolidação).
+5. **Consolidação**: o diretório consolidated/ armazena dados refinados, prontos para
+análises ou consumo por outros sistemas. Isso pode incluir tabelas SQL ou arquivos
+organizados para dashboards.
+6. **Escalabilidade e organização**: a estrutura suporta crescimento, seja por inclusão de
+novos endpoints ou por aumento no volume de dados, sem comprometer a
+organização.
 
 ---
 
