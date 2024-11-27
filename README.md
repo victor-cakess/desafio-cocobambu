@@ -4,9 +4,9 @@ Este projeto consiste na criação de um Data Lake para armazenar dados brutos d
 
 ---
 
-## Estrutura do Projeto
+## Estrutura do projeto
 
-### Estrutura do Data Lake no Google Cloud Storage
+### Estrutura do data lake no Google Cloud Storage
 
 O Data Lake foi configurado com a seguinte estrutura de pastas:
 
@@ -25,14 +25,14 @@ O Data Lake foi configurado com a seguinte estrutura de pastas:
     - **api-requests/**: Logs de requisições das APIs.
     - **etl/**: Logs de execução do pipeline ETL.
 
-## Como Executar
+## Como executar
 
-### Passo 1: Acessar o Data Lake no Google Cloud Storage
+### Passo 1: Acessar o data lake no Google Cloud Storage
 1. O Data Lake está hospedado no Google Cloud Storage. Você pode acessá-lo através do seguinte link:
    [Restaurante Data Lake](https://console.cloud.google.com/storage/browser/restaurante-datalake;tab=objects?forceOnBucketsSortingFiltering=true&hl=pt-BR&inv=1&invt=AbinJw&project=cohesive-gadget-442920-k2&prefix=&forceOnObjectsSortingFiltering=false).
 2. Verifique que o arquivo `ERP.json` está localizado no caminho `raw/guest-checks/`.
 
-### Passo 2: Configuração do Banco de Dados MySQL
+### Passo 2: Configuração do banco de dados MySQL
 1. Crie o banco de dados e as tabelas no MySQL utilizando o script SQL disponível no arquivo `desafio_cocobambu.sql`.
 2. O script cria o databse e as tabelas relacionadas aos dados extraídos, como `guestChecks`, `taxes`, `detailLines`, entre outras.
 
@@ -44,7 +44,7 @@ O Data Lake foi configurado com a seguinte estrutura de pastas:
 
 ---
 
-## Fluxo Operacional
+## Fluxo operacional
 
 1. **Extração**: os dados são extraídos das APIs e armazenados no Data Lake na pasta `raw/`.
 2. **Transformação**: no notebook Python, os dados são transformados e adequados ao modelo relacional.
@@ -52,14 +52,14 @@ O Data Lake foi configurado com a seguinte estrutura de pastas:
 
 ---
 
-## Referências dos Arquivos
+## Referências dos arquivos
 
 - **Data Lake**: estrutura disponível no Google Cloud Storage no caminho mencionado acima.
 - **Script SQL**: `desafio_cocobambu.sql` - cria todas as tabelas no banco de dados.
 - **Notebook Python**: `desafio_coco_bambu.ipynb` - realiza a transformação e carga dos dados.
 - **Arquivo JSON**: localizado em `raw/guest-checks/ERP.json` no Data Lake.
 
-## Decisões Arquiteturais e Justificativa
+## Decisões arquiteturais e justificativa
 
 ### 1. Estrutura do Data Lake
 O **data lake** foi estruturado com base nos princípios de organização modular para permitir:
@@ -67,24 +67,23 @@ O **data lake** foi estruturado com base nos princípios de organização modula
 - **Integridade dos Dados:** os dados brutos são armazenados no diretório `raw` sem qualquer transformação, garantindo que informações originais estejam sempre disponíveis para auditorias ou retrabalhos.
 - **Eficiência em Consultas:** dados consolidados (`consolidated`) são otimizados para análises frequentes, reduzindo o custo e o tempo de processamento.
 
-### 2. Escolha de MySQL como Data Warehouse
+### 2. Escolha de MySQL como data warehouse
 Optou-se pelo **MySQL** para o armazenamento relacional devido:
 - **Compatibilidade e Simplicidade:** MySQL é amplamente utilizado e facilmente integrado ao Python para automação de cargas e consultas.
 - **Estrutura Relacional:** a modelagem das tabelas reflete as dependências e chaves primárias/estrangeiras presentes no JSON, permitindo consultas SQL otimizadas para análise de relacionamento entre diferentes entidades.
 - **Manutenibilidade:** caso ocorra alteração no schema, apenas atualizações pontuais no modelo serão necessárias, como no exemplo de `guestChecks.taxes` renomeado para `guestChecks.taxation`.
 
-### 3. Uso do Python no Pipeline ETL
+### 3. Uso do Python no pipeline ETL
 A escolha do **Python** como linguagem para o pipeline foi feita com base em:
 - **Flexibilidade:** bibliotecas como `json` permitem leitura, transformação e validação dos dados de forma rápida e eficaz.
-- **Automação e Escalabilidade:** scripts automatizados podem ser escalados com a integração de bibliotecas como `Airflow` ou ferramentas nativas do GCP para orquestração no futuro.
-- **Integridade de Dados:** validações foram realizadas para garantir que os dados seguem o formato esperado no MySQL.
+- **Automação e escalabilidade:** scripts automatizados podem ser escalados com a integração de ferramentas como `Airflow` ou ferramentas nativas do GCP para orquestração no futuro.
 
-### 4. Escalabilidade e Preparação para Crescimento
+### 4. Escalabilidade e preparação para crescimento
 O pipeline e o data lake foram configurados para suportar aumento no volume de dados por meio de:
 - **Design Modular:** diretórios separados por etapas (`raw`, `processed`, `consolidated`) e por entidade (`guest-checks`, `transactions`, etc.).
 - **Uso de GCP:** a escolha do Google Cloud Platform possibilita que o armazenamento e o processamento cresçam automaticamente com a demanda.
 
-### 5. Logs e Monitoramento
+### 5. Logs e monitoramento
 A criação de logs em `logs/api-requests` e `logs/etl` foi projetada para:
 - **Rastreabilidade:** registrar todas as interações com APIs e etapas do pipeline.
-- **Detecção de Erros:** logs de erros armazenados em `logs/errors` permitem depuração rápida e eficiente.
+- **Detecção de erros:** logs de erros armazenados em `logs/errors` permitem depuração rápida e eficiente.
