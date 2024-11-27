@@ -3,68 +3,109 @@ CREATE DATABASE db_desafio;
 USE db_desafio;
 
 CREATE TABLE guestChecks (
-    guestCheckId BIGINT PRIMARY KEY, -- Identificador único do pedido (como no JSON).
-    chkNum INT,                      -- Número do cheque.
-    opnBusDt DATE,                   -- Data de abertura do pedido.
-    clsdFlag BOOLEAN,                -- Indicador de fechamento do pedido.
-    gstCnt INT,                      -- Número de convidados no pedido.
-    subTtl DECIMAL(10, 2),           -- Subtotal do pedido.
-    chkTtl DECIMAL(10, 2)            -- Total final do pedido.
+    guestCheckId BIGINT PRIMARY KEY,
+	chkNum INT,
+	opnBusDt DATE,
+	opnUTC TIMESTAMP,
+	opnLcl TIMESTAMP,
+	clsdBusDt DATE,
+	clsdUTC TIMESTAMP,
+	clsdLcl TIMESTAMP,
+	lastTransUTC TIMESTAMP,
+	lastTransLcl TIMESTAMP,
+	lastUpdatedUTC TIMESTAMP,
+	lastUpdatedLcl TIMESTAMP,
+	clsdFlag INT,
+    gstCnt INT,
+	subTtl DECIMAL(10, 2),
+	nonTxblSlsTtl DECIMAL(10, 2),
+	chkTtl DECIMAL(10, 2),
+	dscTtl DECIMAL(10, 2),
+	payTtl DECIMAL(10, 2),
+	balDueTtl DECIMAL(10, 2),
+	rvcNum INT,
+	otNum INT,
+	ocNum INT,
+	tblNum INT,
+	tblName VARCHAR(100), 
+	empNum INT,
+	numSrvcRd INT,
+	numChkPrntd INT
 );
 
 CREATE TABLE taxes (
-    taxNum INT AUTO_INCREMENT PRIMARY KEY,      -- Identificador único do imposto.
-    guestCheckId BIGINT NOT NULL,               -- Relaciona ao pedido na tabela guestChecks.
-    txblSlsTtl DECIMAL(10, 2),                 -- Total de vendas tributáveis (igual ao JSON).
-    taxCollTtl DECIMAL(10, 2),                 -- Total arrecadado em impostos.
-    taxRate DECIMAL(5, 2),                    -- Taxa do imposto.
-    type INT,                                 -- Tipo de imposto.
+    taxNum INT AUTO_INCREMENT PRIMARY KEY,     
+    guestCheckId BIGINT NOT NULL,           
+    txblSlsTtl DECIMAL(10, 2),              
+    taxCollTtl DECIMAL(10, 2),              
+    taxRate DECIMAL(5, 2),                     
+    type INT,                                  
     FOREIGN KEY (guestCheckId) REFERENCES guestChecks(guestCheckId)
 );
 
 CREATE TABLE detailLines (
-    guestCheckLineItemId BIGINT PRIMARY KEY,      -- Identificador único do item (como no JSON).
-    guestCheckId BIGINT NOT NULL,             -- Relaciona à tabela guestChecks.
-    dspTtl DECIMAL(10, 2),                    -- Total exibido para este item.
+    guestCheckLineItemId BIGINT PRIMARY KEY,    
+    guestCheckId BIGINT NOT NULL,             
+    dspTtl DECIMAL(10, 2),                   
+    seatNum INT,                           
+    rvcNum INT,                              
+    dtlOtNum INT,                            
+    dtlOcNum INT,                           
+    lineNum INT,                             
+    dtlId INT,                            
+    detailUTC TIMESTAMP,                      
+    detailLcl TIMESTAMP,                      
+    lastUpdateUTC TIMESTAMP,                 
+    lastUpdateLcl TIMESTAMP,                  
+    busDt DATE,                                
+    wsNum INT,                                
+    aggTtl DECIMAL(10, 2),                  
+    aggQty DECIMAL(10, 2),                    
+    svcRndNum INT,                            
+    chkEmpId BIGINT,                          
+    chkEmpNum INT,                           
+    dspQty DECIMAL(10, 2),
     FOREIGN KEY (guestCheckId) REFERENCES guestChecks(guestCheckId)
 );
 
 CREATE TABLE menuItem (
-    guestCheckLineItemId BIGINT PRIMARY KEY,     -- Relaciona ao item na tabela detailLines.
-    miNum INT,                               -- Número do item no menu.
-    modFlag BOOLEAN,                         -- Indicador de modificação.
-    inclTax DECIMAL(10, 2),                  -- Imposto incluído no preço do item.
+    guestCheckLineItemId BIGINT PRIMARY KEY,   
+    miNum INT,                                
+    modFlag BOOLEAN,                          
+    inclTax DECIMAL(10, 2),                   
+    activeTaxes JSON,                         
+    prcLvl VARCHAR(50),                      
     FOREIGN KEY (guestCheckLineItemId) REFERENCES detailLines(guestCheckLineItemId)
 );
 
 CREATE TABLE discount (
-    discountId INT AUTO_INCREMENT PRIMARY KEY, -- Identificador único do desconto.
-    guestCheckLineItemId BIGINT NOT NULL,         -- Relaciona à tabela detailLines.
-    discountCode VARCHAR(50),                 -- Código do desconto.
-    discountValue DECIMAL(10, 2),             -- Valor do desconto.
+    discountId INT AUTO_INCREMENT PRIMARY KEY, 
+    guestCheckLineItemId BIGINT NOT NULL,      
+    discountCode VARCHAR(50),                  
+    discountValue DECIMAL(10, 2),            
     FOREIGN KEY (guestCheckLineItemId) REFERENCES detailLines(guestCheckLineItemId)
 );
 
 CREATE TABLE serviceCharge (
-    serviceId INT AUTO_INCREMENT PRIMARY KEY,  -- Identificador único da taxa de serviço.
-    guestCheckLineItemId BIGINT NOT NULL,         -- Relaciona à tabela detailLines.
-    serviceCode VARCHAR(50),                  -- Código da taxa de serviço.
-    serviceValue DECIMAL(10, 2),              -- Valor da taxa de serviço.
+    serviceId INT AUTO_INCREMENT PRIMARY KEY, 
+    guestCheckLineItemId BIGINT NOT NULL,     
+    serviceCode VARCHAR(50),                 
+    serviceValue DECIMAL(10, 2),             
     FOREIGN KEY (guestCheckLineItemId) REFERENCES detailLines(guestCheckLineItemId)
 );
 
 CREATE TABLE tenderMedia (
-    tenderId INT AUTO_INCREMENT PRIMARY KEY,  -- Identificador único do pagamento.
-    guestCheckLineItemId BIGINT NOT NULL,        -- Relaciona à tabela detailLines.
-    mediaType VARCHAR(50),                   -- Tipo de pagamento.
-    amountPaid DECIMAL(10, 2),               -- Valor pago.
+    tenderId INT AUTO_INCREMENT PRIMARY KEY,  
+    guestCheckLineItemId BIGINT NOT NULL,     
+    mediaType VARCHAR(50),                   
+    amountPaid DECIMAL(10, 2),               
     FOREIGN KEY (guestCheckLineItemId) REFERENCES detailLines(guestCheckLineItemId)
 );
 
 CREATE TABLE errorCode (
-    errorId INT AUTO_INCREMENT PRIMARY KEY,   -- Identificador único do erro.
-    guestCheckLineItemId BIGINT NOT NULL,        -- Relaciona à tabela detailLines.
-    errorCode VARCHAR(50),                   -- Código do erro.
+    errorId INT AUTO_INCREMENT PRIMARY KEY,   
+    guestCheckLineItemId BIGINT NOT NULL,   
+    errorCode VARCHAR(50),                   
     FOREIGN KEY (guestCheckLineItemId) REFERENCES detailLines(guestCheckLineItemId)
 );
 
